@@ -1,0 +1,54 @@
+{
+  "manifest_version": 3,
+  "name": "illuminati Grabber",
+  "version": "1.1.0",
+  "description": "Download exposed webpage media plus the current X post or Telegram Web media using a local helper.",
+  "icons": {
+    "16": "assets/icons/icon16.png",
+    "32": "assets/icons/icon32.png",
+    "48": "assets/icons/icon48.png",
+    "128": "assets/icons/icon128.png"
+  },
+  "permissions": [
+    "activeTab",
+    "scripting",
+    "downloads",
+    "storage",
+    "nativeMessaging"
+  ],
+  "optional_permissions": ["downloads.open"],
+  "action": {
+    "default_title": "illuminati Grabber",
+    "default_popup": "popup/popup.html",
+    "default_icon": {
+      "16": "assets/icons/icon16.png",
+      "32": "assets/icons/icon32.png",
+      "48": "assets/icons/icon48.png",
+      "128": "assets/icons/icon128.png"
+    }
+  },
+  "background": {
+    "service_worker": "background/service-worker.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://web.telegram.org/*"],
+      "js": ["src/scanner.js", "src/site-adapters.js", "content/telegram-result-bridge.js", "content/content.js"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["https://web.telegram.org/*"],
+      "js": ["src/telegram-inpage.js"],
+      "run_at": "document_idle",
+      "world": "MAIN"
+    }
+  ],
+  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA5jotBfuyH44ImeNkhlqLloivYX+obtymva8hfpgEOlMzeweOCbBMef1PLSEYcdZ8IUStzy4BvRn1GwutDdXRAbfjrjuHgbfeuDma4PSloTm/SRiEsMqC1/2WppJQzxA/yoAVKrk9ay8zX7KYl+XmcbTAdOL9cPfKDBF3ThYxoe2qgCXIMNM0wI+x4jdYazHMM+32+nFoiZ3EAYJnsKLgc1pilWPxp1HhiEvM9ZbjU2wLjbdcPrbcF9hCG33yLyX+nx5IfiUJWwuwbYeWvvSM7P/9xNdmmmzuYM8hpkCNkW5FRAjSbNxc6uFpgYejvfy8w0n4Kx5gBEdy6MKlkFDgCQIDAQAB",
+  "host_permissions": [
+    "https://x.com/*",
+    "https://twitter.com/*",
+    "https://pbs.twimg.com/*",
+    "https://video.twimg.com/*",
+    "https://web.telegram.org/*"
+  ]
+}

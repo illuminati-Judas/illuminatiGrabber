@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>illuminati Grabber</title>
+  <link rel="preload" href="../assets/loader.svg" as="image">
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <main>
+    <header class="topbar">
+      <div class="brand-lockup">
+        <img class="brand-mark" src="../assets/brand-logo.png" alt="">
+        <div>
+          <p class="eyebrow">LOCAL · PRIVATE</p>
+          <h1><span>illuminati</span> Grabber</h1>
+        </div>
+      </div>
+      <button id="scanButton" class="icon-button" title="Rescan page" aria-label="Rescan page">↻</button>
+    </header>
+
+    <section class="page-card" aria-live="polite">
+      <div class="status-orbit">
+        <div class="status-dot" id="statusDot"></div>
+        <img id="activityLoader" class="activity-loader" src="../assets/loader.svg" alt="" hidden>
+      </div>
+      <div class="page-copy">
+        <strong id="pageTitle">Ready to scan</strong>
+        <span id="pageDomain">Open a public webpage first</span>
+      </div>
+    </section>
+
+    <section id="smartPanel" class="smart-panel" hidden>
+      <div>
+        <span id="smartSite" class="smart-site">SITE MODE</span>
+        <strong id="smartLabel">Current media</strong>
+      </div>
+      <button id="smartButton" class="smart-button">Download</button>
+    </section>
+
+    <section class="history-panel" aria-labelledby="historyTitle">
+      <div class="history-heading">
+        <div>
+          <span class="smart-site">RECENT DOWNLOADS</span>
+          <strong id="historyTitle">Latest media downloads</strong>
+        </div>
+        <button id="clearHistory" type="button" title="Clear completed and failed history/jobs; keep active downloads and saved files">Clear finished</button>
+      </div>
+      <div id="downloadHistory" class="download-history" aria-live="polite">
+        <p class="history-empty">No downloads yet.</p>
+      </div>
+    </section>
+
+    <section id="downloadJobsPanel" class="download-jobs-panel" aria-labelledby="downloadJobsTitle" hidden>
+      <div class="download-jobs-heading">
+        <span class="smart-site">DOWNLOAD PROGRESS</span>
+        <strong id="downloadJobsTitle">Files</strong>
+      </div>
+      <div id="downloadJobsList" class="download-jobs-list" aria-live="polite"></div>
+    </section>
+
+    <section class="controls">
+      <div class="tabs" role="tablist" aria-label="Media type">
+        <button class="tab active" data-filter="all">All <span id="allCount">0</span></button>
+        <button class="tab" data-filter="image">Images <span id="imageCount">0</span></button>
+        <button class="tab" data-filter="video">Videos <span id="videoCount">0</span></button>
+      </div>
+      <details id="filterPanel" class="filter-panel">
+        <summary>
+          <span>Filters & view</span>
+          <span id="filteredCount">0 shown</span>
+        </summary>
+        <div class="filter-options">
+          <label class="filter-field filter-wide">
+            <span>Search</span>
+            <input id="searchInput" type="search" placeholder="Filename or URL" aria-label="Filter media">
+          </label>
+          <label class="filter-field filter-wide">
+            <span>Download folder</span>
+            <input id="folderInput" type="text" value="WebMedia" maxlength="80">
+          </label>
+          <div class="resolution-options filter-wide">
+            <span>Resolution</span>
+            <label><input id="hideSmall" type="checkbox" checked> Hide below 200×200</label>
+            <label><input id="originalOnly" type="checkbox"> Original only</label>
+          </div>
+          <label class="filter-field">Sort
+            <select id="sortMedia" aria-label="Sort media">
+              <option value="page">Page order</option>
+              <option value="resolution">Resolution</option>
+              <option value="size">Known file size</option>
+            </select>
+          </label>
+          <label class="filter-field">Thumbnail size
+            <select id="thumbnailSize" aria-label="Thumbnail size">
+              <option value="compact">Compact</option>
+              <option value="medium" selected>Medium</option>
+              <option value="large">Large</option>
+            </select>
+          </label>
+        </div>
+      </details>
+    </section>
+
+    <section class="selection-bar">
+      <label><input id="selectVisible" type="checkbox"> Select visible</label>
+      <div class="selection-actions">
+        <span id="selectionCount">0 selected</span>
+        <button id="expandGallery" type="button" aria-pressed="false">Expand preview</button>
+      </div>
+    </section>
+
+    <section id="message" class="message">Scan after you manually enter the page or pass its age gate.</section>
+    <section id="gallery" class="gallery" aria-live="polite"></section>
+
+    <section id="expandedActionBar" class="expanded-actionbar" aria-label="Expanded preview actions">
+      <div class="expanded-selection">
+        <strong id="expandedSelectionCount">0 selected</strong>
+        <button id="expandedSelectVisible" type="button">Select all</button>
+      </div>
+      <button id="expandedDownload" class="primary" type="button" disabled>Download selected</button>
+      <button id="expandedExit" type="button">Exit</button>
+    </section>
+
+    <details id="diagnostics" class="diagnostics">
+      <summary>Diagnostics · <span id="buildId">loading</span></summary>
+      <div class="diagnostic-actions">
+        <button id="copyDiagnostics" type="button">Copy log</button>
+        <button id="clearDiagnostics" type="button">Clear</button>
+      </div>
+      <pre id="diagnosticLog">No diagnostic entries yet.</pre>
+    </details>
+
+    <section id="previewModal" class="preview-modal" role="dialog" aria-modal="true" aria-labelledby="previewTitle" hidden>
+      <div class="preview-modal-card">
+        <div class="preview-modal-heading">
+          <strong id="previewTitle">Media preview</strong>
+          <div class="preview-heading-actions">
+            <div class="preview-zoom-controls" aria-label="Preview zoom controls">
+              <button id="previewZoomOut" type="button" aria-label="Zoom out">−</button>
+              <button id="previewZoomReset" type="button">100%</button>
+              <button id="previewZoomIn" type="button" aria-label="Zoom in">+</button>
+            </div>
+            <button id="closePreview" type="button" aria-label="Close preview">×</button>
+          </div>
+        </div>
+        <div class="preview-stage">
+          <button id="previewPrevious" class="preview-nav" type="button" aria-label="Previous media">‹</button>
+          <div class="preview-viewport">
+            <img id="previewImage" alt="Media preview" referrerpolicy="no-referrer">
+            <video id="previewVideo" hidden controls muted playsinline preload="metadata" crossorigin="anonymous" referrerpolicy="no-referrer" controlslist="nodownload noremoteplayback" disablepictureinpicture disableremoteplayback></video>
+            <p id="previewNotice" class="preview-notice" hidden></p>
+          </div>
+          <button id="previewNext" class="preview-nav" type="button" aria-label="Next media">›</button>
+        </div>
+        <div class="preview-modal-meta">
+          <strong id="previewCaption"></strong>
+          <span id="previewDetails"></span>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <button id="downloadButton" class="primary" disabled>Download selected</button>
+      <p>Direct images and MP4/WebM only · No DRM bypass</p>
+    </footer>
+  </main>
+  <script src="../src/downloads.js"></script>
+  <script src="../src/gallery-model.js"></script>
+  <script src="../src/media-preview.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>

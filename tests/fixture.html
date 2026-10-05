@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Age Gate Scanner Fixture</title>
+  <style>
+    body { font-family: sans-serif; padding: 30px; }
+    #content { display: none; }
+    .hero { width: 200px; height: 100px; background-image: url('/media/background.webp'); }
+  </style>
+</head>
+<body>
+  <section id="gate">
+    <h1>Age confirmation fixture</h1>
+    <button id="enter">I am 18 or older — Enter</button>
+  </section>
+  <main id="content">
+    <img src="/media/photo.jpg" srcset="/media/photo-small.jpg 480w, /media/photo-large.webp 2x" alt="Fixture image">
+    <img data-src="/media/lazy.png" alt="Lazy fixture">
+    <div class="hero"></div>
+    <video poster="/media/poster.jpg" controls>
+      <source src="/media/movie.mp4" type="video/mp4">
+      <source src="/media/movie.webm" type="video/webm">
+    </video>
+    <a href="/media/download.mp4">Direct video</a>
+    <video src="blob:http://127.0.0.1/unsupported"></video>
+  </main>
+  <script>
+    document.querySelector('#enter').addEventListener('click', () => {
+      document.querySelector('#gate').remove();
+      document.querySelector('#content').style.display = 'block';
+      setTimeout(() => {
+        const dynamic = document.createElement('img');
+        dynamic.src = '/media/dynamic.avif';
+        dynamic.alt = 'Dynamically loaded image';
+        document.querySelector('#content').append(dynamic);
+      }, 100);
+    });
+  </script>
+</body>
+</html>

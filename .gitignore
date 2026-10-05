@@ -1,0 +1,16 @@
+node_modules/
+installer/keys/
+__pycache__/
+*.pyc
+.DS_Store
+.env
+.env.*
+*.pem
+*.key
+*.p12
+*.pfx
+*.log
+coverage/
+test-results/
+playwright-report/
+HANDOFF.md
