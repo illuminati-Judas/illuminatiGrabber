@@ -17,7 +17,7 @@ function Assert-NoLinks($Root) {
 }
 function Assert-Payload($Root) {
     Assert-NoLinks $Root
-    $hashes = Get-Content -LiteralPath (Join-Path $Root 'checksums.json') -Raw | ConvertFrom-Json
+    $hashes = Get-Content -LiteralPath (Join-Path $Root 'checksums.json') -Raw -Encoding UTF8 | ConvertFrom-Json
     $names = @($hashes.PSObject.Properties.Name)
     foreach ($required in @('extension/manifest.json', 'native_host/web-media-grabber-host.exe', 'native_host/bin/yt-dlp.exe', 'native_host/bin/ffmpeg.exe', 'installer/windows/install.ps1', 'installer/windows/uninstall.ps1', 'installer/windows/common.ps1')) {
         if ($names -notcontains $required) { throw "Missing checksum: $required" }
@@ -34,7 +34,7 @@ function Assert-Payload($Root) {
         $relative = $file.FullName.Substring($Root.Length + 1).Replace('\', '/')
         if ($relative -ne 'checksums.json' -and $names -notcontains $relative) { throw "Unlisted payload: $relative" }
     }
-    $manifest = Get-Content -LiteralPath (Join-Path $Root 'extension/manifest.json') -Raw | ConvertFrom-Json
+    $manifest = Get-Content -LiteralPath (Join-Path $Root 'extension/manifest.json') -Raw -Encoding UTF8 | ConvertFrom-Json
     if (-not $manifest.key) { throw 'Stable extension key missing' }
 }
 function Invoke-HostProbe($Exe) {
@@ -111,6 +111,6 @@ function Assert-OwnedInstall {
     Assert-NoLinks $InstallRoot
     $marker = Join-Path $InstallRoot 'install-owner.json'
     if (-not (Test-Path -LiteralPath $marker)) { throw 'Existing directory is not an owned install' }
-    $owner = Get-Content -LiteralPath $marker -Raw | ConvertFrom-Json
+    $owner = Get-Content -LiteralPath $marker -Raw -Encoding UTF8 | ConvertFrom-Json
     if ($owner.host -ne $HostName -or $owner.root -ne $InstallRoot) { throw 'Invalid ownership marker' }
 }

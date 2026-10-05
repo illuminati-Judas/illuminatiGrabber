@@ -1,7 +1,7 @@
 . (Join-Path $PSScriptRoot 'common.ps1')
 if (-not (Test-Path -LiteralPath $InstallRoot)) { Write-Host 'Nothing installed.'; exit 0 }
 Assert-OwnedInstall
-$hashes = Get-Content -LiteralPath (Join-Path $InstallRoot 'checksums.json') -Raw | ConvertFrom-Json
+$hashes = Get-Content -LiteralPath (Join-Path $InstallRoot 'checksums.json') -Raw -Encoding UTF8 | ConvertFrom-Json
 foreach ($entry in $hashes.PSObject.Properties) {
     if ($entry.Name -notmatch '^(extension|native_host|installer|licenses)/[A-Za-z0-9_./-]+$' -and $entry.Name -ne 'WINDOWS.md' -and $entry.Name -ne 'provenance.json') { throw 'Unsafe inventory path' }
     if ($entry.Name.Split('/') -contains '..' -or $entry.Name.Split('/') -contains '.') { throw 'Unsafe inventory path' }
