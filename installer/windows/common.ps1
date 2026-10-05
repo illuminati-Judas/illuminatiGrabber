@@ -45,6 +45,13 @@ function Invoke-HostProbe($Exe) {
     $info.RedirectStandardInput = $true
     $info.RedirectStandardOutput = $true
     $info.RedirectStandardError = $true
+    # .NET Framework (Windows PowerShell 5.1) otherwise creates a BOM-emitting
+    # stdin writer. Native Messaging framing requires a byte-exact pipe.
+    $oldInputEncoding = [Console]::InputEncoding
+    [Console]::InputEncoding = $Utf8
+    if ($info.PSObject.Properties.Name -contains 'StandardInputEncoding') {
+        $info.StandardInputEncoding = $Utf8
+    }
     $process = New-Object Diagnostics.Process
     $process.StartInfo = $info
     try {
@@ -61,7 +68,7 @@ function Invoke-HostProbe($Exe) {
             $body = New-Object byte[] $size
             Read-FrameBytes $process.StandardOutput.BaseStream $body
             $reply = $Utf8.GetString($body) | ConvertFrom-Json
-            if (-not $reply.ok) { throw "Host probe failed: $command" }
+            if (-not $reply.ok) { throw ("Host probe failed: $command; " + ($reply | ConvertTo-Json -Compress)) }
             if ($command -eq 'ping' -and $reply.status -ne 'pong') { throw 'Invalid ping' }
             if ($command -eq 'check_dependencies' -and $reply.status -ne 'ready') { throw 'Dependencies unavailable' }
         }
@@ -80,6 +87,7 @@ function Invoke-HostProbe($Exe) {
             $process.WaitForExit(10000) | Out-Null
         }
         $process.Dispose()
+        [Console]::InputEncoding = $oldInputEncoding
     }
     foreach ($tool in @('yt-dlp', 'ffmpeg')) {
         $arguments = if ($tool -eq 'ffmpeg') { '-version' } else { '--version' }
