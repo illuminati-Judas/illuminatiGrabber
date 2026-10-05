@@ -66,6 +66,18 @@ Telegram hotfix build `1.1.0-telegram-save-fix-16`: เรียก Save picker 
 - ประวัติถูกเก็บเฉพาะใน `chrome.storage.local` สูงสุด 20 รายการ; เปิด Popup เพื่อล้าง Badge หรือกด **Clear** เพื่อลบประวัติ
 - ไม่ส่ง Cookie, Token หรือข้อมูลบัญชีออกจากหน้า Telegram และไม่อ่านทั้ง Chat/Channel
 
+## Windows x64 / Chrome
+
+Use the `windows-x64` GitHub Actions artifact: extract the portable ZIP and run
+`installer\windows\install.cmd` as your normal user. The delivery bundles the
+standalone native host, yt-dlp and ffmpeg; no Python or manual dependency setup
+is required on the target. Load `%LOCALAPPDATA%\WebMediaGrabber\extension` through
+Chrome **Developer mode → Load unpacked**. Installer details, integrity limits,
+uninstall instructions and verification boundaries: [Windows guide](installer/windows/WINDOWS.md).
+
+Windows CI execution and real user-machine Chrome validation are pending until
+the workflow/user test actually runs. The HTML/MP4 limitation remains unresolved.
+
 ## ติดตั้งบน macOS
 
 1. แตก ZIP

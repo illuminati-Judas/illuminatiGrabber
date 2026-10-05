@@ -33,18 +33,24 @@ except ImportError:  # Executed directly by Chrome's native-messaging manifest.
     )
 
 VERSION = "1.1.0"
-APP_ROOT = Path(__file__).resolve().parent
+def application_root() -> Path:
+    # PyInstaller one-file extracts Python into a temporary directory; tools
+    # live next to the actual executable, not next to that extracted module.
+    return Path(sys.executable if getattr(sys, "frozen", False) else __file__).resolve().parent
+
+
+APP_ROOT = application_root()
 DOWNLOAD_ROOT = Path.home() / "Downloads" / "WebMedia"
 
 
 def find_tool(name: str, env_name: str) -> str | None:
     configured = os.environ.get(env_name)
+    executable = name + ".exe" if sys.platform == "win32" else name
     candidates = [
         configured,
-        str(APP_ROOT / "bin" / name),
+        str(APP_ROOT / "bin" / executable),
         shutil.which(name),
-        f"/opt/homebrew/bin/{name}",
-        f"/usr/local/bin/{name}",
+        *([] if sys.platform == "win32" else [f"/opt/homebrew/bin/{name}", f"/usr/local/bin/{name}"]),
     ]
     return next((candidate for candidate in candidates if candidate and Path(candidate).is_file()), None)
 
@@ -82,7 +88,9 @@ def run_download(command: list[str], output_dir: Path) -> dict:
         text=True,
         timeout=3600,
         check=False,
-        env={**os.environ, "PATH": "/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin"},
+        env=(dict(os.environ) if sys.platform == "win32" else
+             {**os.environ, "PATH": "/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin"}),
+        **({"creationflags": subprocess.CREATE_NO_WINDOW} if sys.platform == "win32" and os.name == "nt" else {}),
     )
     lines = completed.stdout.splitlines()[-80:]
     return {
@@ -113,6 +121,9 @@ def handle_message(message: dict) -> dict:
             message.get("output_dir", ""),
             message.get("filename", ""),
         )
+        if sys.platform == "win32":
+            os.startfile(str(target))
+            return {"ok": True, "status": "opened", "error": ""}
         completed = subprocess.run(
             ["/usr/bin/open", str(target)],
             stdin=subprocess.DEVNULL,
@@ -152,6 +163,10 @@ def handle_message(message: dict) -> dict:
 
 
 def main() -> int:
+    if sys.platform == "win32":
+        import msvcrt
+        msvcrt.setmode(sys.stdin.fileno(), os.O_BINARY)
+        msvcrt.setmode(sys.stdout.fileno(), os.O_BINARY)
     while True:
         try:
             message = read_native_message(sys.stdin.buffer)
