@@ -65,10 +65,20 @@ function Invoke-HostProbe($Exe) {
             if ($command -eq 'ping' -and $reply.status -ne 'pong') { throw 'Invalid ping' }
             if ($command -eq 'check_dependencies' -and $reply.status -ne 'ready') { throw 'Dependencies unavailable' }
         }
-        $process.StandardInput.Close()
+        # Close the binary pipe, not StreamWriter: Windows PowerShell 5.1
+        # may append a text-encoding preamble when disposing that writer.
+        $process.StandardInput.BaseStream.Close()
         if (-not $process.WaitForExit(10000) -or $process.ExitCode -ne 0) { throw 'Host exit failed' }
+    } catch {
+        Write-Host ("Native host probe error: " + $_.Exception.ToString())
+        throw
     } finally {
-        if ($process.Id -and -not $process.HasExited) { $process.Kill() }
+        if ($process.Id -and -not $process.HasExited) {
+            # A one-file PyInstaller host has a child process holding the EXE.
+            # Terminate only the probe's process tree, then wait before cleanup.
+            & taskkill.exe /PID $process.Id /T /F 2>$null | Out-Null
+            $process.WaitForExit(10000) | Out-Null
+        }
         $process.Dispose()
     }
     foreach ($tool in @('yt-dlp', 'ffmpeg')) {
