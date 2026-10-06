@@ -2,11 +2,18 @@
 
 Chrome extension สำหรับเลือกดาวน์โหลดรูปและวิดีโอจากหน้าเว็บ รวมถึงสื่อปัจจุบันบน X และ Telegram Web ใช้เฉพาะเนื้อหาที่คุณมีสิทธิ์ดาวน์โหลด
 
-## เริ่มใช้งาน — สำหรับผู้ใช้ทั่วไป
+## Installation / วิธีติดตั้ง — Windows และ macOS (OS X)
+
+| ระบบที่คุณใช้ | คู่มือติดตั้งทีละขั้น | ไฟล์ที่ต้องดาวน์โหลด |
+|---|---|---|
+| Windows 10/11 x64 | [ติดตั้ง Windows](#install-windows) | [Windows installer ZIP](https://github.com/illuminati-Judas/illuminatiGrabber/releases/download/v1.1.0-windows.1/illuminatiGrabber-windows-x64.zip) |
+| Mac / macOS (เดิมชื่อ OS X) | [ติดตั้ง macOS](#install-macos) | [Source ZIP พร้อม macOS installer](https://github.com/illuminati-Judas/illuminatiGrabber/archive/refs/heads/main.zip) — ยังไม่รวม dependencies |
 
 **เลือกทำเฉพาะหัวข้อของเครื่องคุณ ไม่ต้องใช้ Git, Node.js, `npm test` หรือคำสั่งตรวจสอบโครงการด้านล่าง** โปรแกรมยังไม่ได้ติดตั้งผ่าน Chrome Web Store จึงต้องเพิ่ม extension ด้วยตนเองหนึ่งครั้ง
 
-### Windows 10/11 แบบ x64
+<a id="install-windows"></a>
+
+### ติดตั้ง Windows 10/11 แบบ x64
 
 1. [ดาวน์โหลดชุดติดตั้ง Windows ZIP](https://github.com/illuminati-Judas/illuminatiGrabber/releases/download/v1.1.0-windows.1/illuminatiGrabber-windows-x64.zip) จาก repository นี้ ไม่ใช่ปุ่ม **Code → Download ZIP** ซึ่งเป็น source สำหรับนักพัฒนา
 2. คลิกขวาไฟล์ ZIP → **Extract All / แยกทั้งหมด** แล้วเปิดโฟลเดอร์ที่แตกแล้ว ห้ามเปิดตัวติดตั้งจากด้านใน ZIP
@@ -21,7 +28,9 @@ Chrome extension สำหรับเลือกดาวน์โหลดร
 
 **ข้อควรทราบ:** EXE ยังไม่มีลายเซ็นดิจิทัล Windows อาจแสดงคำเตือน อย่าปิดระบบป้องกันหรือข้ามนโยบายบริษัท หากถูกบล็อกให้ตรวจแหล่งดาวน์โหลดและปรึกษา IT ก่อน รายละเอียด: [คู่มือ Windows](installer/windows/WINDOWS.md)
 
-### macOS
+<a id="install-macos"></a>
+
+### ติดตั้ง Mac / macOS (OS X)
 
 **macOS ยังไม่ใช่ชุดติดตั้งแบบมี dependency ครบในไฟล์เดียว:** ต้องมี Google Chrome, `/usr/bin/python3`, yt-dlp และ ffmpeg ตัวติดตั้งจะพยายามติดตั้งสองตัวหลังผ่าน Homebrew ที่ `/opt/homebrew/bin/brew` หากยังไม่มี หากขึ้นว่า dependency หรือ Python ไม่พร้อม ให้หยุดและแก้ตาม error ก่อน ไม่ต้องรันคำสั่งทดสอบของนักพัฒนา
 
