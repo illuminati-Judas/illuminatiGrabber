@@ -1,7 +1,8 @@
 # Windows x64 / Chrome
 
-Download the **windows-x64** GitHub Actions artifact, then extract the contained
-`illuminatiGrabber-windows-x64.zip` to a normal local folder. Do not run from inside
+Download [`illuminatiGrabber-windows-x64.zip` from GitHub Releases](https://github.com/illuminati-Judas/illuminatiGrabber/releases/download/v1.1.0-windows.1/illuminatiGrabber-windows-x64.zip), then extract it
+to a normal local folder. The repository's **Code → Download ZIP** is source code,
+not the bundled Windows installer. Do not run from inside
 Explorer's ZIP view. Windows 10/11 x64 is the build target (not Windows ARM64).
 
 1. Run `installer\windows\install.cmd` as your normal user. No administrator,

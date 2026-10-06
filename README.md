@@ -1,5 +1,55 @@
 # illuminati Grabber 1.1
 
+Chrome extension สำหรับเลือกดาวน์โหลดรูปและวิดีโอจากหน้าเว็บ รวมถึงสื่อปัจจุบันบน X และ Telegram Web ใช้เฉพาะเนื้อหาที่คุณมีสิทธิ์ดาวน์โหลด
+
+## เริ่มใช้งาน — สำหรับผู้ใช้ทั่วไป
+
+**เลือกทำเฉพาะหัวข้อของเครื่องคุณ ไม่ต้องใช้ Git, Node.js, `npm test` หรือคำสั่งตรวจสอบโครงการด้านล่าง** โปรแกรมยังไม่ได้ติดตั้งผ่าน Chrome Web Store จึงต้องเพิ่ม extension ด้วยตนเองหนึ่งครั้ง
+
+### Windows 10/11 แบบ x64
+
+1. [ดาวน์โหลดชุดติดตั้ง Windows ZIP](https://github.com/illuminati-Judas/illuminatiGrabber/releases/download/v1.1.0-windows.1/illuminatiGrabber-windows-x64.zip) จาก repository นี้ ไม่ใช่ปุ่ม **Code → Download ZIP** ซึ่งเป็น source สำหรับนักพัฒนา
+2. คลิกขวาไฟล์ ZIP → **Extract All / แยกทั้งหมด** แล้วเปิดโฟลเดอร์ที่แตกแล้ว ห้ามเปิดตัวติดตั้งจากด้านใน ZIP
+3. เปิดโฟลเดอร์ `installer` → `windows` แล้วดับเบิลคลิก **`install.cmd`** ใช้บัญชีปกติ ไม่ต้อง Run as administrator และไม่ต้องลง Python, yt-dlp หรือ ffmpeg เอง
+4. รอให้ติดตั้งและตรวจสอบสำเร็จ ถ้าขึ้น error ให้หยุดและเก็บข้อความ error ไว้ ไม่ถือว่าติดตั้งเสร็จ
+5. เปิด Google Chrome พิมพ์ `chrome://extensions` ในช่องที่อยู่ แล้วกด Enter
+6. เปิด **Developer mode / โหมดนักพัฒนาซอฟต์แวร์** ที่มุมขวาบน แล้วคลิก **Load unpacked / โหลดส่วนขยายที่คลายการแพคแล้ว**
+7. ในหน้าต่างเลือกโฟลเดอร์ วาง `%LOCALAPPDATA%\WebMediaGrabber\extension` ในช่องที่อยู่ กด Enter แล้วเลือกโฟลเดอร์นี้ — ไม่ใช่โฟลเดอร์ ZIP ที่ดาวน์โหลด
+8. ตรวจว่ามีการ์ด **illuminati Grabber** และเปิดใช้งานอยู่ จากนั้นกดไอคอนรูปจิ๊กซอว์ใน Chrome แล้วปักหมุด extension เพื่อเรียกใช้ง่าย
+
+`%LOCALAPPDATA%` เป็นตัวแทนโฟลเดอร์ของบัญชี Windows คุณ วางตามนี้ได้เลย ไม่ต้องแทนด้วยชื่อของใคร ชุดนี้รองรับ x64 ไม่ใช่ Windows ARM64
+
+**ข้อควรทราบ:** EXE ยังไม่มีลายเซ็นดิจิทัล Windows อาจแสดงคำเตือน อย่าปิดระบบป้องกันหรือข้ามนโยบายบริษัท หากถูกบล็อกให้ตรวจแหล่งดาวน์โหลดและปรึกษา IT ก่อน รายละเอียด: [คู่มือ Windows](installer/windows/WINDOWS.md)
+
+### macOS
+
+**macOS ยังไม่ใช่ชุดติดตั้งแบบมี dependency ครบในไฟล์เดียว:** ต้องมี Google Chrome, `/usr/bin/python3`, yt-dlp และ ffmpeg ตัวติดตั้งจะพยายามติดตั้งสองตัวหลังผ่าน Homebrew ที่ `/opt/homebrew/bin/brew` หากยังไม่มี หากขึ้นว่า dependency หรือ Python ไม่พร้อม ให้หยุดและแก้ตาม error ก่อน ไม่ต้องรันคำสั่งทดสอบของนักพัฒนา
+
+1. ที่หน้า repository เลือก **Code → Download ZIP** แล้วดับเบิลคลิก ZIP เพื่อแตกไฟล์
+2. เปิดโฟลเดอร์ที่แตกแล้ว → `installer` → ดับเบิลคลิก **`install.command`** หน้าต่าง Terminal จะเปิดระหว่างติดตั้ง รอจนขึ้น **Installed and verified.** ถ้าขึ้น error แสดงว่ายังไม่เสร็จ
+3. เปิด Google Chrome → พิมพ์ `chrome://extensions` → เปิด **Developer mode** → คลิก **Load unpacked**
+4. ในหน้าต่างเลือกโฟลเดอร์ กด **Command + Shift + G** แล้ววาง `~/Library/Application Support/WebMediaGrabber/extension` กด Enter และเลือกโฟลเดอร์นี้
+5. ตรวจว่ามีการ์ด **illuminati Grabber** เปิดใช้งานอยู่ แล้วปักหมุดผ่านไอคอนจิ๊กซอว์ใน Chrome
+
+`~` หมายถึง home folder ของคุณเอง ใช้ข้อความนี้ได้เลย ไม่ต้องใส่ชื่อบัญชีของผู้พัฒนา หาก macOS ไม่อนุญาตให้เปิดไฟล์ อย่าปิด Gatekeeper ทั้งระบบ ให้ตรวจแหล่งไฟล์และข้อความเตือนก่อน รายละเอียด: [คู่มือ macOS](installer/README.md)
+
+### ทดลองใช้หลังติดตั้ง
+
+1. เปิดหน้าเว็บที่มีรูปหรือวิดีโอ แล้วคลิกไอคอน **illuminati Grabber**
+2. เลือกรายการ แล้วกด **Download selected** สำหรับเว็บทั่วไป ส่วน Telegram ให้เปิดรูป/วิดีโอใน Media Viewer ก่อนใช้ **Download Photo / Download Video**
+3. ตรวจไฟล์ผ่านหน้า Downloads ของ Chrome (`chrome://downloads`) โดยทั่วไปอยู่ใต้โฟลเดอร์ `Downloads/WebMedia` หรือปลายทางที่คุณเลือก
+4. หากมี error **Native host / Helper not found** แปลว่า Chrome ติดต่อส่วนช่วยดาวน์โหลดไม่ได้ ตรวจว่าตัวติดตั้งสำเร็จและเลือกโฟลเดอร์ extension ที่ติดตั้งแล้วจริง ไม่ใช่ source ZIP
+
+### อัปเดตสำหรับผู้ใช้เดิม
+
+ดาวน์โหลดชุดใหม่ของระบบเดียวกัน แตกไฟล์และรันตัวติดตั้งใหม่ เมื่อสำเร็จให้เปิด `chrome://extensions` แล้วกดปุ่ม **Reload** บนการ์ดเดิม จากนั้นรีเฟรชหน้าเว็บที่เปิดค้างไว้ ไม่ต้องเพิ่ม extension ซ้ำอีกชุด
+
+> คู่มือนี้อธิบายขั้นตอนตามตัวติดตั้ง ไม่ใช่การรับรองว่าได้ทดสอบกับเครื่องผู้ใช้ทุกระบบ Windows CI ของ release ผ่านแล้ว แต่การใช้งานจริงครบวงจรใน Chrome บนเครื่อง Windows ผู้ใช้ยังรอการยืนยัน
+
+---
+
+## รายละเอียด build และข้อมูลสำหรับนักพัฒนา
+
 ## Current build: `1.1.0-history-queue-fix-2`
 
 - **Clear finished** clears completed/failed history and queue entries, preserving active downloads and saved files.
@@ -68,15 +118,15 @@ Telegram hotfix build `1.1.0-telegram-save-fix-16`: เรียก Save picker 
 
 ## Windows x64 / Chrome
 
-Use the `windows-x64` GitHub Actions artifact: extract the portable ZIP and run
+Use the Windows ZIP from [GitHub Releases](https://github.com/illuminati-Judas/illuminatiGrabber/releases/tag/v1.1.0-windows.1): extract the portable ZIP and run
 `installer\windows\install.cmd` as your normal user. The delivery bundles the
 standalone native host, yt-dlp and ffmpeg; no Python or manual dependency setup
 is required on the target. Load `%LOCALAPPDATA%\WebMediaGrabber\extension` through
 Chrome **Developer mode → Load unpacked**. Installer details, integrity limits,
 uninstall instructions and verification boundaries: [Windows guide](installer/windows/WINDOWS.md).
 
-Windows CI execution and real user-machine Chrome validation are pending until
-the workflow/user test actually runs. The HTML/MP4 limitation remains unresolved.
+Windows CI for release `v1.1.0-windows.1` passed. Real Windows Chrome user-machine
+validation remains pending. The HTML/MP4 limitation remains unresolved.
 
 ## ติดตั้งบน macOS
 
