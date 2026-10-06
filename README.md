@@ -121,8 +121,20 @@ Chrome ไม่อนุญาตให้ Installer ส่วนตัวต�
 
 ## ตรวจสอบโครงการ
 
+### Project path / ตำแหน่งโฟลเดอร์โปรเจกต์
+
+ตัวอย่างคำสั่งใช้ `~/WebMediaGrabber` แทน absolute path ของเครื่องผู้พัฒนา เพื่อไม่เผยแพร่ชื่อบัญชีส่วนตัว และไม่ได้บังคับให้ทุกเครื่องใช้โฟลเดอร์ชื่อนี้
+
+- `~` หมายถึง home directory ของผู้ใช้ที่กำลังรันคำสั่ง ไม่ต้องเปลี่ยนเป็นชื่อผู้พัฒนา
+- `WebMediaGrabber` คือชื่อโฟลเดอร์ตัวอย่าง ให้เปลี่ยนเป็นโฟลเดอร์ที่คุณ clone หรือแตก ZIP จริง
+- หาก clone ด้วย `git clone https://github.com/illuminati-Judas/illuminatiGrabber.git` จาก home directory โดยไม่กำหนดชื่อปลายทาง ให้ใช้ `cd ~/illuminatiGrabber`
+- หากเก็บไว้ที่อื่น ให้ใช้ `cd "/path/to/your/project"` โดยแทน path ตัวอย่างด้วยตำแหน่งจริงของคุณ; ใส่เครื่องหมายคำพูดเมื่อ path มีช่องว่าง
+- คำสั่งทดสอบด้านล่างต้องรันจากโฟลเดอร์ source ที่มี `package.json` ไม่ใช่โฟลเดอร์ extension ที่ติดตั้งแล้วหรือชุด Windows portable ที่ไม่มี source/tests ครบ
+
+This is a documentation-only path change. Use your own cloned/extracted source directory; it does not move files, rename the Native Host, or change the installed extension/helper paths. Existing installations do not need to be reinstalled for this README change.
+
 ```bash
-# Run from your extracted or cloned project folder (example):
+# Example: source extracted or cloned into this folder
 cd ~/WebMediaGrabber
 npm test
 python3 -m unittest tests/test_native_host.py
