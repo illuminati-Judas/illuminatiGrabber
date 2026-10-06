@@ -122,7 +122,8 @@ Chrome ไม่อนุญาตให้ Installer ส่วนตัวต�
 ## ตรวจสอบโครงการ
 
 ```bash
-cd /Users/phattarawutsakonsaringkarn/WebMediaGrabber
+# Run from your extracted or cloned project folder (example):
+cd ~/WebMediaGrabber
 npm test
 python3 -m unittest tests/test_native_host.py
 npm run check
